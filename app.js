@@ -24,12 +24,19 @@ function checkExistsWithTimeout(filePath, timeout) {
 
 const secret = require("./secret.json");
 
+let options = new chrome.Options();
+//Below arguments are critical for Heroku deployment
+options.addArguments("--headless");
+options.addArguments("--disable-gpu");
+options.addArguments("--no-sandbox");
+options.setUserPreferences(
+  { "download.default_directory": __dirname + "\\image" }
+);
+
 (async function example() {
   let driver = await new Builder()
   .forBrowser('chrome')
-  .setChromeOptions(new chrome.Options().headless().setUserPreferences(
-    { "download.default_directory": __dirname + "\\image" }
-  )).build();
+  .setChromeOptions(options).build();
   try {
     await driver.get('https://whiteboard.microsoft.com/me/whiteboards/ed8015d6-206b-4418-8cd5-0ade9f528db6');
     await driver.findElement(By.id('i0116')).sendKeys(secret.email, Key.RETURN);
