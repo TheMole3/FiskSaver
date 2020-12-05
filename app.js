@@ -24,6 +24,8 @@ function checkExistsWithTimeout(filePath, timeout) {
 
 
 let options = new chrome.Options();
+options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
+let serviceBuilder = new chrome.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
 //Below arguments are critical for Heroku deployment
 options.addArguments("--headless");
 options.addArguments("--disable-gpu");
@@ -33,9 +35,7 @@ options.setUserPreferences(
 );
 
 (async function example() {
-  let driver = await new Builder()
-  .forBrowser('chrome')
-  .setChromeOptions(options).build();
+  let driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
   try {
     await driver.get('https://whiteboard.microsoft.com/me/whiteboards/ed8015d6-206b-4418-8cd5-0ade9f528db6');
     await driver.findElement(By.id('i0116')).sendKeys(process.env.EMAIL, Key.RETURN);
