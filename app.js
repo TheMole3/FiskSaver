@@ -22,7 +22,6 @@ function checkExistsWithTimeout(filePath, timeout) {
     });
 }
 
-const secret = require("./secret.json");
 
 let options = new chrome.Options();
 //Below arguments are critical for Heroku deployment
@@ -39,9 +38,9 @@ options.setUserPreferences(
   .setChromeOptions(options).build();
   try {
     await driver.get('https://whiteboard.microsoft.com/me/whiteboards/ed8015d6-206b-4418-8cd5-0ade9f528db6');
-    await driver.findElement(By.id('i0116')).sendKeys(secret.email, Key.RETURN);
+    await driver.findElement(By.id('i0116')).sendKeys(process.env.EMAIL, Key.RETURN);
     await driver.sleep(1000)
-    await driver.findElement(By.id('i0118')).sendKeys(secret.password, Key.RETURN);
+    await driver.findElement(By.id('i0118')).sendKeys(process.env.PASSWORD, Key.RETURN);
     await driver.sleep(5000)
     await driver.wait(until.elementLocated(By.id('settingsButton')), 60 * 1000)
     await driver.findElement(By.id('settingsButton')).click();
