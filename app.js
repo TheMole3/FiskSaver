@@ -10,7 +10,6 @@ function checkExistsWithTimeout(filePath, timeout) {
     return new Promise(function (resolve, reject) {
 
         var timer = setTimeout(function () {
-            watcher.close();
             reject(new Error('File did not exists and was not created during the timeout.'));
         }, timeout);
 
