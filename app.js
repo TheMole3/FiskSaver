@@ -1,5 +1,5 @@
 const {Builder, By, Key, until} = require('selenium-webdriver');
-const firefox = require('selenium-webdriver/firefox');
+const chrome = require('selenium-webdriver/chrome');
 const fs = require("fs")
 const path = require('path');
 
@@ -24,18 +24,12 @@ function checkExistsWithTimeout(filePath, timeout) {
 
 const secret = require("./secret.json");
 
-
-let options = new firefox.Options().headless();
-options.setPreference("browser.download.folderList", 2);
-options.setPreference("browser.download.dir", __dirname + "\\image");
-options.setPreference("browser.download.useDownloadDir", true);
-options.setPreference("browser.helperApps.neverAsk.saveToDisk", "image/png");
-options.setPreference("pdfjs.disabled", true);  // disable the built-in PDF viewer
-
-
-
 (async function example() {
-  let driver = await new Builder().forBrowser('firefox').setFirefoxOptions(options).build();
+  let driver = await new Builder()
+  .forBrowser('chrome')
+  .setChromeOptions(new chrome.Options().headless().setUserPreferences(
+    { "download.default_directory": __dirname + "\\image" }
+  )).build();
   try {
     await driver.get('https://whiteboard.microsoft.com/me/whiteboards/ed8015d6-206b-4418-8cd5-0ade9f528db6');
     await driver.findElement(By.id('i0116')).sendKeys(secret.email, Key.RETURN);
