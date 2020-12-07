@@ -3,9 +3,6 @@ const chrome = require('selenium-webdriver/chrome');
 const fs = require("fs")
 const path = require('path');
 
-const express = require('express');
-const app = express();
-
 function checkExistsWithTimeout(filePath, timeout) {
     return new Promise(function (resolve, reject) {
 
@@ -24,10 +21,9 @@ function checkExistsWithTimeout(filePath, timeout) {
     });
 }
 
+var secret = require("/secret.json")
 
 let options = new chrome.Options();
-options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
-let serviceBuilder = new chrome.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
 //Below arguments are critical for Heroku deployment
 options.addArguments("--headless");
 options.addArguments("--disable-gpu");
@@ -40,9 +36,9 @@ options.setUserPreferences(
   let driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
   try {
     await driver.get('https://whiteboard.microsoft.com/me/whiteboards/ed8015d6-206b-4418-8cd5-0ade9f528db6');
-    await driver.findElement(By.id('i0116')).sendKeys(process.env.EMAIL, Key.RETURN);
+    await driver.findElement(By.id('i0116')).sendKeys(secret.EMAIL, Key.RETURN);
     await driver.sleep(1000)
-    await driver.findElement(By.id('i0118')).sendKeys(process.env.PASSWORD, Key.RETURN);
+    await driver.findElement(By.id('i0118')).sendKeys(secret.PASSWORD, Key.RETURN);
     await driver.sleep(5000)
     await driver.wait(until.elementLocated(By.id('settingsButton')), 60 * 1000)
     await driver.findElement(By.id('settingsButton')).click();
@@ -62,8 +58,3 @@ options.setUserPreferences(
     await driver.quit();
   }
 })();
-
-const port = process.env.PORT || 5000;
-app.listen(port, () => {
-    console.log(`listening to port ${port} now...`);
-});
