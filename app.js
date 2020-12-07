@@ -21,7 +21,7 @@ function checkExistsWithTimeout(filePath, timeout) {
     });
 }
 
-var secret = require("/secret.json")
+var secret = require("./secret.json")
 
 let options = new chrome.Options();
 //Below arguments are critical for Heroku deployment
